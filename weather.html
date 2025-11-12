@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Weather — Current</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div class="logo">Weather<span style="color:#ffd36b">.</span></div>
+			<nav class="nav">
+				<a href="index.html">Home</a>
+				<a href="weather.html">Weather</a>
+				<a href="about.html">About</a>
+			</nav>
+		</header>
+
+		<main style="display:flex;justify-content:center">
+			<div class="phone">
+				<div class="screen">
+					<div style="text-align:center;margin-top:12px">
+						<div style="font-weight:700;letter-spacing:0.6px">City</div>
+						<div style="color:var(--muted);margin-bottom:8px">Precipitations · Max: 24° · Min: 18°</div>
+						<div style="display:flex;align-items:center;justify-content:center;gap:14px">
+							<div style="width:120px;height:120px;border-radius:16px;background:linear-gradient(180deg,#ffffff22,#ffffff11);display:flex;align-items:center;justify-content:center">
+								<!-- cloud + sun svg -->
+								<svg width="84" height="64" viewBox="0 0 84 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<circle cx="18" cy="12" r="10" fill="#ffd36b" />
+									<ellipse cx="48" cy="36" rx="28" ry="18" fill="#ffffff" fill-opacity="0.95" />
+								</svg>
+							</div>
+							<div>
+								<div class="temp">19°</div>
+								<div class="temp-sub">July, 21</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card" style="width:100%;margin-top:18px">
+						<div style="display:flex;justify-content:space-between;align-items:center">
+							<div style="font-weight:700">Today</div>
+							<div style="color:var(--muted)">July, 21</div>
+						</div>
+						<div class="forecast-row" style="margin-top:12px">
+							<div class="forecast-item">15:00<br><span style="font-weight:700">19°</span></div>
+							<div class="forecast-item">16:00<br><span style="font-weight:700">18°</span></div>
+							<div class="forecast-item">17:00<br><span style="font-weight:700">18°</span></div>
+							<div class="forecast-item">18:00<br><span style="font-weight:700">18°</span></div>
+						</div>
+					</div>
+
+					<div class="card" style="width:100%">
+						<div style="display:flex;justify-content:space-between;align-items:center">
+							<div>
+								<div style="font-weight:700">Sunrise</div>
+								<div style="color:var(--muted)">5:28 AM</div>
+							</div>
+							<div>
+								<div style="font-weight:700">UV Index</div>
+								<div style="color:var(--muted)">4 Moderate</div>
+							</div>
+							<div>
+								<div style="font-weight:700">Humidity</div>
+								<div style="color:var(--muted)">78%</div>
+							</div>
+						</div>
+					</div>
+
+					<a href="index.html" class="cta" style="width:100%;margin-top:16px">Back</a>
+				</div>
+			</div>
+		</main>
+
+		<footer>Data shown is static demo data.</footer>
+	</div>
+</body>
+</html>

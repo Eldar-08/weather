@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Weather — Home</title>
+	<link rel="stylesheet" href="styles.css">
+	<style> /* small page-specific tweaks */
+		.title small{display:block;font-size:18px;color:rgba(255,255,255,0.8);font-weight:600}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<div class="logo">Weather<span style="color:#ffd36b">.</span></div>
+			<nav class="nav">
+				<a href="index.html">Home</a>
+				<a href="weather.html">Weather</a>
+				<a href="about.html">About</a>
+			</nav>
+		</header>
+
+		<main>
+			<div class="stage">
+				<!-- Left: start screen -->
+				<div class="phone">
+					<div class="screen">
+						<div class="hero-illustration">
+							<!-- simple weather SVG -->
+							<svg width="160" height="120" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<ellipse cx="50" cy="70" rx="36" ry="20" fill="#ffffff" fill-opacity="0.9" />
+								<g transform="translate(70,10)">
+									<circle cx="0" cy="0" r="22" fill="#ffd36b" />
+								</g>
+								<rect x="40" y="60" width="80" height="18" rx="6" fill="#66c0ff" transform="rotate(-18 40 60)" />
+							</svg>
+						</div>
+						<div class="title">Weather <small>ForeCasts</small></div>
+						<div class="subtitle">Beautiful & simple weather app</div>
+						<a class="cta" href="weather.html">Get Start</a>
+					</div>
+				</div>
+
+				<!-- Center: main weather preview -->
+				<div class="phone">
+					<div class="screen">
+						<div style="margin-top:6px;text-align:center">
+							<div style="font-size:14px;color:var(--muted);">Today</div>
+							<div class="temp">19°</div>
+							<div class="temp-sub">Precipitations · Max: 24° · Min: 18°</div>
+						</div>
+						<div class="card" style="width:100%">
+							<div class="forecast-row">
+								<div class="forecast-item">15:00<br><span style="font-weight:700">19°</span></div>
+								<div class="forecast-item">16:00<br><span style="font-weight:700">18°</span></div>
+								<div class="forecast-item">17:00<br><span style="font-weight:700">18°</span></div>
+								<div class="forecast-item">18:00<br><span style="font-weight:700">18°</span></div>
+							</div>
+						</div>
+						<div style="margin-top:auto;display:flex;gap:10px;width:100%;justify-content:space-between">
+							<a href="about.html" class="cta" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;flex:1;margin-right:6px;text-align:center">About</a>
+							<a href="weather.html" class="cta" style="flex:1">Open</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Right: more screen preview -->
+				<div class="phone">
+					<div class="screen">
+						<div style="width:100%;text-align:center;margin-top:20px">
+							<div style="font-weight:700;font-size:16px">North America</div>
+							<div style="color:var(--muted);margin-top:6px">Max: 24° · Min: 18°</div>
+						</div>
+						<div class="card" style="width:100%;margin-top:18px">
+							<div style="display:flex;align-items:center;justify-content:space-between">
+								<div>
+									<div style="font-weight:700">Air Quality</div>
+									<div style="color:var(--muted)">3 - Low Health Risk</div>
+								</div>
+								<div style="text-align:right">
+									<div style="font-weight:800;font-size:20px">4</div>
+									<div style="color:var(--muted)">Moderate</div>
+								</div>
+							</div>
+						</div>
+						<div style="margin-top:auto"></div>
+					</div>
+				</div>
+
+			</div>
+		</main>
+
+		<footer>Created for demo — open <a href="weather.html" style="color:inherit">weather</a> or <a href="about.html" style="color:inherit">about</a></footer>
+	</div>
+</body>
+</html>
