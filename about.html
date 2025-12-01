@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>About — Weather</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 	<div class="wrap">
 		<header>
@@ -20,7 +22,9 @@
 		<main>
 			<div class="about-content">
 				<h1 style="margin-top:0">About this app</h1>
-				<p style="color:var(--muted)">This is a small demo weather UI inspired by the provided design mockups. It shows a home/start view, a main weather screen and additional info cards. The pages are static HTML/CSS and can be extended to fetch live data from any weather API.</p>
+				<p style="color:var(--muted)">This is a small demo weather UI inspired by the provided design mockups.
+					It shows a home/start view, a main weather screen and additional info cards. The pages are static
+					HTML/CSS and can be extended to fetch live data from any weather API.</p>
 
 				<h3 style="margin-top:18px">What you can do</h3>
 				<ul style="color:var(--muted)">
@@ -31,12 +35,61 @@
 
 				<div style="margin-top:18px">
 					<a href="weather.html" class="cta">Open Weather</a>
-					<a href="index.html" class="cta" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-left:12px">Back</a>
+					<a href="index.html" class="cta"
+						style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-left:12px">Back</a>
 				</div>
 			</div>
 		</main>
 
 		<footer>Small demo — made to match the sample design.</footer>
 	</div>
+
+	<script>
+		// Function 1: Toggle dark/light theme
+		function toggleTheme() {
+			const isDark = document.body.style.filter === 'invert(1)';
+			document.body.style.filter = isDark ? 'none' : 'invert(1)';
+			localStorage.setItem('theme', isDark ? 'light' : 'dark');
+		}
+
+		// Function 2: Copy text to clipboard
+		function copyToClipboard(text) {
+			navigator.clipboard.writeText(text).then(() => {
+				console.log('Copied to clipboard: ' + text);
+				return true;
+			}).catch(err => {
+				console.error('Failed to copy:', err);
+				return false;
+			});
+		}
+
+		// Function 3: Scroll to top smoothly
+		function scrollToTop() {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+
+		// Function 4: Get browser information
+		function getBrowserInfo() {
+			return {
+				userAgent: navigator.userAgent,
+				language: navigator.language,
+				online: navigator.onLine,
+				cookiesEnabled: navigator.cookieEnabled
+			};
+		}
+
+		// Function 5: Generate unique ID
+		function generateUniqueID() {
+			return 'ID_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+		}
+
+		// Example usage: Uncomment to test
+		// toggleTheme();
+		// copyToClipboard('Hello World');
+		// scrollToTop();
+		// console.log(getBrowserInfo());
+		// console.log(generateUniqueID());
+	</script>
 </body>
+
 </html>

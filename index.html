@@ -1,14 +1,22 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>Weather — Home</title>
 	<link rel="stylesheet" href="styles.css">
-	<style> /* small page-specific tweaks */
-		.title small{display:block;font-size:18px;color:rgba(255,255,255,0.8);font-weight:600}
+	<style>
+		/* small page-specific tweaks */
+		.title small {
+			display: block;
+			font-size: 18px;
+			color: rgba(255, 255, 255, 0.8);
+			font-weight: 600
+		}
 	</style>
 </head>
+
 <body>
 	<div class="wrap">
 		<header>
@@ -27,12 +35,14 @@
 					<div class="screen">
 						<div class="hero-illustration">
 							<!-- simple weather SVG -->
-							<svg width="160" height="120" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<svg width="160" height="120" viewBox="0 0 160 120" fill="none"
+								xmlns="http://www.w3.org/2000/svg">
 								<ellipse cx="50" cy="70" rx="36" ry="20" fill="#ffffff" fill-opacity="0.9" />
 								<g transform="translate(70,10)">
 									<circle cx="0" cy="0" r="22" fill="#ffd36b" />
 								</g>
-								<rect x="40" y="60" width="80" height="18" rx="6" fill="#66c0ff" transform="rotate(-18 40 60)" />
+								<rect x="40" y="60" width="80" height="18" rx="6" fill="#66c0ff"
+									transform="rotate(-18 40 60)" />
 							</svg>
 						</div>
 						<div class="title">Weather <small>ForeCasts</small></div>
@@ -45,12 +55,15 @@
 				<div class="phone">
 					<div class="screen">
 						<div style="margin-top:6px;text-align:center">
-							<div style="font-size:14px;color:var(--muted);">Today</div>
-							<div class="temp">19°</div>
-							<div class="temp-sub">Precipitations · Max: 24° · Min: 18°</div>
+							<div style="font-size:14px;color:var(--muted);" id="homeLabel">Today</div>
+							<div class="temp" id="homeTemp">19°</div>
+							<div class="temp-sub" id="homeDesc">Precipitations · Max: 24° · Min: 18°</div>
 						</div>
+						<div style="text-align:center;font-size:48px;margin:10px 0" id="homeIcon">🌤️</div>
 						<div class="card" style="width:100%">
-							<div class="forecast-row">
+							<div style="font-weight:700;margin-bottom:8px" id="homeCity">Bishkek</div>
+							<div style="color:var(--muted);margin-bottom:12px" id="homeDate">Dec, 01</div>
+							<div class="forecast-row" id="homeForecast">
 								<div class="forecast-item">15:00<br><span style="font-weight:700">19°</span></div>
 								<div class="forecast-item">16:00<br><span style="font-weight:700">18°</span></div>
 								<div class="forecast-item">17:00<br><span style="font-weight:700">18°</span></div>
@@ -58,7 +71,8 @@
 							</div>
 						</div>
 						<div style="margin-top:auto;display:flex;gap:10px;width:100%;justify-content:space-between">
-							<a href="about.html" class="cta" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;flex:1;margin-right:6px;text-align:center">About</a>
+							<a href="about.html" class="cta"
+								style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;flex:1;margin-right:6px;text-align:center">About</a>
 							<a href="weather.html" class="cta" style="flex:1">Open</a>
 						</div>
 					</div>
@@ -90,7 +104,123 @@
 			</div>
 		</main>
 
-		<footer>Created for demo — open <a href="weather.html" style="color:inherit">weather</a> or <a href="about.html" style="color:inherit">about</a></footer>
+		<footer>Created for demo — open <a href="weather.html" style="color:inherit">weather</a> or <a href="about.html"
+				style="color:inherit">about</a></footer>
 	</div>
+
+	<script>
+		// Function 1: Get current date and day
+		function getCurrentDate() {
+			const date = new Date();
+			const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+			return date.toLocaleDateString('en-US', options);
+		}
+
+		// Function 2: Validate email format
+		function isValidEmail(email) {
+			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			return emailRegex.test(email);
+		}
+
+		// Function 3: Generate random greeting
+		function getGreeting(hour = new Date().getHours()) {
+			if (hour < 12) return 'Good Morning';
+			if (hour < 18) return 'Good Afternoon';
+			return 'Good Evening';
+		}
+
+		// Function 4: Calculate days until next event
+		function daysUntilDate(targetDate) {
+			const today = new Date();
+			const target = new Date(targetDate);
+			const diffTime = target - today;
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+			return diffDays;
+		}
+
+		// Function 5: Format large numbers with commas
+		function formatNumber(num) {
+			return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
+
+		// Get weather icon
+		function getWeatherIcon(code) {
+			const weatherCodes = {
+				0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️',
+				51: '🌧️', 53: '🌧️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '⛈️',
+				71: '❄️', 73: '❄️', 75: '❄️', 80: '🌧️', 81: '⛈️', 82: '⛈️',
+				85: '❄️', 86: '❄️', 95: '⛈️', 96: '⛈️', 99: '⛈️'
+			};
+			return weatherCodes[code] || '🌤️';
+		}
+
+		// Format time
+		function formatTime(hour, minute = 0) {
+			const h = String(hour).padStart(2, '0');
+			const m = String(minute).padStart(2, '0');
+			return `${h}:${m}`;
+		}
+
+		// Fetch weather data from Open-Meteo API
+		async function fetchBishkekWeather() {
+			try {
+				const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=42.8746&longitude=74.5698&current=temperature_2m,weather_code&hourly=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&forecast_days=1&timezone=auto`);
+				const data = await response.json();
+
+				const current = data.current;
+				const hourly = data.hourly;
+				const daily = data.daily;
+
+				return {
+					temperature: current.temperature_2m,
+					condition: current.weather_code,
+					maxTemp: daily.temperature_2m_max[0],
+					minTemp: daily.temperature_2m_min[0],
+					hourlyTemps: hourly.temperature_2m.slice(0, 4),
+					hourlyConditions: hourly.weather_code.slice(0, 4)
+				};
+			} catch (error) {
+				console.error('Error fetching Bishkek weather:', error);
+				return null;
+			}
+		}
+
+		// Update home page with Bishkek weather
+		async function loadBishkekWeather() {
+			const weather = await fetchBishkekWeather();
+			if (weather) {
+				document.getElementById('homeTemp').textContent = Math.round(weather.temperature) + '°';
+				document.getElementById('homeDesc').textContent = `Max: ${Math.round(weather.maxTemp)}° · Min: ${Math.round(weather.minTemp)}°`;
+				document.getElementById('homeIcon').textContent = getWeatherIcon(weather.condition);
+
+				const today = new Date();
+				const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+				document.getElementById('homeDate').textContent = dateStr;
+
+				// Update hourly forecast
+				const forecastRow = document.getElementById('homeForecast');
+				forecastRow.innerHTML = '';
+				const currentHour = today.getHours();
+
+				for (let i = 0; i < 4; i++) {
+					const hour = (currentHour + i) % 24;
+					const hourStr = formatTime(hour, 0);
+					const temp = Math.round(weather.hourlyTemps[i]);
+					const icon = getWeatherIcon(weather.hourlyConditions[i]);
+
+					const item = document.createElement('div');
+					item.className = 'forecast-item';
+					item.innerHTML = `${hourStr}<br><span style="font-weight:700">${temp}°</span><br>${icon}`;
+					forecastRow.appendChild(item);
+				}
+			}
+		}
+
+		// Load Bishkek weather on page load
+		window.addEventListener('load', () => {
+			loadBishkekWeather();
+		});
+	</script>
 </body>
+
 </html>

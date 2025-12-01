@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>Weather — Current</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 	<div class="wrap">
 		<header>
@@ -20,30 +22,45 @@
 		<main style="display:flex;justify-content:center">
 			<div class="phone">
 				<div class="screen">
+					<!-- Search Section -->
+					<div style="width:100%;margin-bottom:16px">
+						<div style="display:flex;gap:8px;margin-bottom:8px">
+							<input type="text" id="searchInput" placeholder="Search city, region, country..."
+								style="flex:1;padding:10px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);color:#fff;font-size:13px;outline:none"
+								oninput="autoSearchWeather()"
+								onkeydown="if(event.key==='Enter') searchWeatherLocation()">
+							<button onclick="searchWeatherLocation()"
+								style="padding:10px 16px;border-radius:20px;background:#f0c027;color:#2b1a00;border:none;font-weight:700;cursor:pointer;font-size:13px">
+								Search
+							</button>
+						</div>
+						<div id="searchResults"
+							style="max-height:150px;overflow-y:auto;display:none;background:rgba(255,255,255,0.05);border-radius:12px;padding:8px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.1)">
+						</div>
+					</div>
+
 					<div style="text-align:center;margin-top:12px">
-						<div style="font-weight:700;letter-spacing:0.6px">City</div>
-						<div style="color:var(--muted);margin-bottom:8px">Precipitations · Max: 24° · Min: 18°</div>
+						<div style="font-weight:700;letter-spacing:0.6px" id="cityName">City</div>
+						<div style="color:var(--muted);margin-bottom:8px" id="weatherDesc">Precipitations · Max: 24° ·
+							Min: 18°</div>
 						<div style="display:flex;align-items:center;justify-content:center;gap:14px">
-							<div style="width:120px;height:120px;border-radius:16px;background:linear-gradient(180deg,#ffffff22,#ffffff11);display:flex;align-items:center;justify-content:center">
-								<!-- cloud + sun svg -->
-								<svg width="84" height="64" viewBox="0 0 84 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<circle cx="18" cy="12" r="10" fill="#ffd36b" />
-									<ellipse cx="48" cy="36" rx="28" ry="18" fill="#ffffff" fill-opacity="0.95" />
-								</svg>
+							<div style="width:120px;height:120px;border-radius:16px;background:linear-gradient(180deg,#ffffff22,#ffffff11);display:flex;align-items:center;justify-content:center;font-size:64px"
+								id="weatherIcon">
+								🌤️
 							</div>
 							<div>
-								<div class="temp">19°</div>
-								<div class="temp-sub">July, 21</div>
+								<div class="temp" id="tempDisplay">19°</div>
+								<div class="temp-sub" id="dateDisplay">Dec, 01</div>
 							</div>
 						</div>
 					</div>
 
 					<div class="card" style="width:100%;margin-top:18px">
 						<div style="display:flex;justify-content:space-between;align-items:center">
-							<div style="font-weight:700">Today</div>
-							<div style="color:var(--muted)">July, 21</div>
+							<div style="font-weight:700">Hourly Forecast</div>
+							<div style="color:var(--muted)" id="todayDate">Dec, 01</div>
 						</div>
-						<div class="forecast-row" style="margin-top:12px">
+						<div class="forecast-row" style="margin-top:12px" id="forecastRow">
 							<div class="forecast-item">15:00<br><span style="font-weight:700">19°</span></div>
 							<div class="forecast-item">16:00<br><span style="font-weight:700">18°</span></div>
 							<div class="forecast-item">17:00<br><span style="font-weight:700">18°</span></div>
@@ -52,18 +69,35 @@
 					</div>
 
 					<div class="card" style="width:100%">
-						<div style="display:flex;justify-content:space-between;align-items:center">
+						<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
 							<div>
 								<div style="font-weight:700">Sunrise</div>
-								<div style="color:var(--muted)">5:28 AM</div>
+								<div style="color:var(--muted)" id="sunriseTime">5:28 AM</div>
 							</div>
 							<div>
 								<div style="font-weight:700">UV Index</div>
-								<div style="color:var(--muted)">4 Moderate</div>
+								<div style="color:var(--muted)" id="uvValue">4 Moderate</div>
 							</div>
 							<div>
 								<div style="font-weight:700">Humidity</div>
-								<div style="color:var(--muted)">78%</div>
+								<div style="color:var(--muted)" id="humidityValue">78%</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card" style="width:100%">
+						<div style="display:flex;justify-content:space-between;align-items:center">
+							<div>
+								<div style="font-weight:700">Max Temp</div>
+								<div style="color:var(--muted)" id="maxTemp">24°</div>
+							</div>
+							<div>
+								<div style="font-weight:700">Min Temp</div>
+								<div style="color:var(--muted)" id="minTemp">18°</div>
+							</div>
+							<div>
+								<div style="font-weight:700">Wind Speed</div>
+								<div style="color:var(--muted)" id="windSpeed">12 km/h</div>
 							</div>
 						</div>
 					</div>
@@ -75,5 +109,344 @@
 
 		<footer>Data shown is static demo data.</footer>
 	</div>
+
+	<script>
+		// Function 1: Update temperature display
+		function updateTemperature(tempCelsius, elementSelector = '#tempDisplay') {
+			const tempElement = document.querySelector(elementSelector);
+			if (tempElement) {
+				tempElement.textContent = Math.round(tempCelsius) + '°';
+			}
+		}
+
+		// Function 2: Format time in HH:MM format
+		function formatTime(hour, minute = 0) {
+			const h = String(hour).padStart(2, '0');
+			const m = String(minute).padStart(2, '0');
+			return `${h}:${m}`;
+		}
+
+		// Function 3: Convert Celsius to Fahrenheit
+		function convertCelsiusToFahrenheit(celsius) {
+			return (celsius * 9 / 5) + 32;
+		}
+
+		// Function 4: Get weather icon based on condition code
+		function getWeatherIcon(code) {
+			const weatherCodes = {
+				0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️',
+				51: '🌧️', 53: '🌧️', 55: '🌧️', 61: '🌧️', 63: '🌧️', 65: '⛈️',
+				71: '❄️', 73: '❄️', 75: '❄️', 80: '🌧️', 81: '⛈️', 82: '⛈️',
+				85: '❄️', 86: '❄️', 95: '⛈️', 96: '⛈️', 99: '⛈️'
+			};
+			return weatherCodes[code] || '🌤️';
+		}
+
+		// Function 5: Fetch real weather data from Open-Meteo API with hourly data
+		async function fetchWeatherData(latitude = 40.7128, longitude = -74.0060, cityName = 'New York') {
+			try {
+				console.log(`Fetching weather API for: lat=${latitude}, lon=${longitude}`);
+
+				const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max,wind_speed_10m_max&forecast_days=1&timezone=auto`;
+
+				console.log('API URL:', url);
+
+				const response = await fetch(url);
+
+				if (!response.ok) {
+					throw new Error(`API Error: ${response.status} ${response.statusText}`);
+				}
+
+				const data = await response.json();
+
+				console.log('API Response:', data);
+
+				if (!data.current || !data.daily || !data.hourly) {
+					throw new Error('Invalid API response structure');
+				}
+
+				const current = data.current;
+				const daily = data.daily;
+				const hourly = data.hourly;
+
+				// Parse sunrise time safely
+				let sunriseTime = '5:28 AM';
+				if (daily.sunrise && daily.sunrise[0]) {
+					sunriseTime = daily.sunrise[0].split('T')[1] || '5:28 AM';
+				}
+
+				return {
+					city: cityName,
+					temperature: current.temperature_2m,
+					condition: current.weather_code,
+					humidity: current.relative_humidity_2m,
+					maxTemp: daily.temperature_2m_max[0],
+					minTemp: daily.temperature_2m_min[0],
+					uvIndex: Math.round(daily.uv_index_max[0]),
+					sunrise: sunriseTime,
+					windSpeed: Math.round(daily.wind_speed_10m_max[0]),
+					hourlyTemps: hourly.temperature_2m.slice(0, 24),
+					hourlyConditions: hourly.weather_code.slice(0, 24)
+				};
+			} catch (error) {
+				console.error('Error fetching weather:', error);
+				console.error('Error details:', error.message);
+				return null;
+			}
+		}
+
+		// Function 6: Search for location by name using Geocoding API
+		async function searchLocation(query) {
+			try {
+				const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=50&language=en&format=json`);
+				const data = await response.json();
+
+				if (!data.results) return [];
+
+				// Sort results by population (if available) to prioritize major cities
+				const sorted = data.results.sort((a, b) => {
+					const popA = a.population || 0;
+					const popB = b.population || 0;
+					return popB - popA;
+				});
+
+				return sorted;
+			} catch (error) {
+				console.error('Error searching location:', error);
+				return [];
+			}
+		}
+
+		// Function 7: Auto-search as user types (real-time search for all global locations)
+		let searchTimeout;
+		async function autoSearchWeather() {
+			const searchInput = document.getElementById('searchInput');
+			const query = searchInput.value.trim();
+
+			clearTimeout(searchTimeout);
+
+			if (query.length < 1) {
+				document.getElementById('searchResults').style.display = 'none';
+				return;
+			}
+
+			searchTimeout = setTimeout(async () => {
+				if (query.length < 1) {
+					document.getElementById('searchResults').style.display = 'none';
+					return;
+				}
+
+				const results = await searchLocation(query);
+				const searchResultsDiv = document.getElementById('searchResults');
+
+				if (results.length === 0) {
+					searchResultsDiv.innerHTML = '<div style="padding:12px;color:#fff;text-align:center;font-size:13px">No locations found</div>';
+					searchResultsDiv.style.display = 'block';
+					return;
+				}
+
+				let html = '';
+				// Show more results including small villages, regions, and all city types
+				results.slice(0, 15).forEach((result, index) => {
+					const admin1 = result.admin1 || '';
+					const admin2 = result.admin2 || '';
+					const admin3 = result.admin3 || '';
+					const country = result.country || '';
+
+					// Build location hierarchy
+					let locationHierarchy = '';
+					if (admin1) locationHierarchy += admin1;
+					if (admin2 && admin2 !== admin1) locationHierarchy += (locationHierarchy ? ', ' : '') + admin2;
+					if (admin3 && admin3 !== admin2) locationHierarchy += (locationHierarchy ? ', ' : '') + admin3;
+					if (country) locationHierarchy += (locationHierarchy ? ', ' : '') + country;
+
+					html += `
+						<div onclick="quickSelectLocation(${index})" 
+							style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.08);cursor:pointer;font-size:12px;transition:background 0.2s"
+							onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+							onmouseout="this.style.background='transparent'">
+							<div style="font-weight:600">${result.name}</div>
+							<div style="color:rgba(255,255,255,0.5);font-size:10px">${locationHierarchy}</div>
+						</div>
+					`;
+				});
+
+				// Store results globally for access
+				window.searchResultsCache = results;
+				searchResultsDiv.innerHTML = html;
+				searchResultsDiv.style.display = 'block';
+			}, 200);
+		}
+
+		// Function 8: Display search results on button click (searches all global locations)
+		async function searchWeatherLocation() {
+			const searchInput = document.getElementById('searchInput');
+			const query = searchInput.value.trim();
+
+			if (query.length < 1) {
+				document.getElementById('searchResults').style.display = 'none';
+				return;
+			}
+
+			const results = await searchLocation(query);
+			const searchResultsDiv = document.getElementById('searchResults');
+
+			if (results.length === 0) {
+				searchResultsDiv.innerHTML = '<div style="padding:12px;color:#fff;text-align:center;font-size:13px">No locations found for "' + query + '"</div>';
+				searchResultsDiv.style.display = 'block';
+				return;
+			}
+
+			let html = '';
+			// Show comprehensive results including villages, regions, cities, all location types
+			results.slice(0, 15).forEach((result, index) => {
+				const admin1 = result.admin1 || '';
+				const admin2 = result.admin2 || '';
+				const admin3 = result.admin3 || '';
+				const country = result.country || '';
+
+				// Build location hierarchy
+				let locationHierarchy = '';
+				if (admin1) locationHierarchy += admin1;
+				if (admin2 && admin2 !== admin1) locationHierarchy += (locationHierarchy ? ', ' : '') + admin2;
+				if (admin3 && admin3 !== admin2) locationHierarchy += (locationHierarchy ? ', ' : '') + admin3;
+				if (country) locationHierarchy += (locationHierarchy ? ', ' : '') + country;
+
+				html += `
+					<div onclick="quickSelectLocation(${index})" 
+						style="padding:10px;border-bottom:1px solid rgba(255,255,255,0.08);cursor:pointer;font-size:12px;transition:background 0.2s"
+						onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+						onmouseout="this.style.background='transparent'">
+						<div style="font-weight:600">${result.name}</div>
+						<div style="color:rgba(255,255,255,0.5);font-size:10px">${locationHierarchy}</div>
+					</div>
+				`;
+			});
+
+			// Store results globally for access
+			window.searchResultsCache = results;
+			searchResultsDiv.innerHTML = html;
+			searchResultsDiv.style.display = 'block';
+		}
+
+		// Function 9: Select location from search results
+		function selectLocation(lat, lon, cityName, country) {
+			const fullName = `${cityName}, ${country}`;
+			document.getElementById('searchInput').value = fullName;
+			document.getElementById('searchResults').style.display = 'none';
+			updateWeatherUI(lat, lon, fullName);
+		}
+
+		// Function 10: Quick select using cache (avoids quote issues)
+		function quickSelectLocation(index) {
+			if (!window.searchResultsCache || !window.searchResultsCache[index]) return;
+
+			const result = window.searchResultsCache[index];
+			const fullName = `${result.name}, ${result.country || 'Location'}`;
+			document.getElementById('searchInput').value = fullName;
+			document.getElementById('searchResults').style.display = 'none';
+
+			console.log(`Fetching weather for: ${fullName} (${result.latitude}, ${result.longitude})`);
+			updateWeatherUI(result.latitude, result.longitude, fullName);
+		}
+
+		// Update UI with weather data
+		async function updateWeatherUI(latitude = 40.7128, longitude = -74.0060, cityName = 'New York') {
+			try {
+				console.log(`Updating weather for: ${cityName} at coordinates (${latitude}, ${longitude})`);
+
+				// Show loading state
+				document.getElementById('weatherDesc').textContent = 'Loading weather data...';
+
+				const weather = await fetchWeatherData(latitude, longitude, cityName);
+
+				if (!weather) {
+					console.error('Failed to fetch weather data');
+					document.getElementById('weatherDesc').textContent = 'Error loading weather data. Check console for details.';
+					return;
+				}
+
+				console.log('Weather data received:', weather);
+
+				// Update main display
+				document.getElementById('cityName').textContent = weather.city;
+				document.getElementById('weatherDesc').textContent = `Humidity: ${weather.humidity}% · Max: ${Math.round(weather.maxTemp)}° · Min: ${Math.round(weather.minTemp)}°`;
+				document.getElementById('weatherIcon').textContent = getWeatherIcon(weather.condition);
+				updateTemperature(weather.temperature);
+
+				const today = new Date();
+				const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+				document.getElementById('dateDisplay').textContent = dateStr;
+				document.getElementById('todayDate').textContent = dateStr;
+
+				// Update details
+				document.getElementById('sunriseTime').textContent = weather.sunrise;
+				document.getElementById('uvValue').textContent = weather.uvIndex + ' ' + (weather.uvIndex <= 2 ? 'Low' : weather.uvIndex <= 5 ? 'Moderate' : weather.uvIndex <= 7 ? 'High' : 'Very High');
+				document.getElementById('humidityValue').textContent = weather.humidity + '%';
+				document.getElementById('maxTemp').textContent = Math.round(weather.maxTemp) + '°';
+				document.getElementById('minTemp').textContent = Math.round(weather.minTemp) + '°';
+				document.getElementById('windSpeed').textContent = weather.windSpeed + ' km/h';
+
+				// Update hourly forecast
+				updateHourlyForecast(weather.hourlyTemps, weather.hourlyConditions);
+
+				console.log('Weather UI updated successfully');
+			} catch (error) {
+				console.error('Error updating weather UI:', error);
+				document.getElementById('weatherDesc').textContent = 'Error: ' + error.message;
+			}
+		}		// Update hourly forecast display
+		function updateHourlyForecast(temps, conditions) {
+			const forecastRow = document.getElementById('forecastRow');
+			forecastRow.innerHTML = '';
+
+			const now = new Date();
+			const currentHour = now.getHours();
+
+			for (let i = 0; i < 4; i++) {
+				const hour = (currentHour + i) % 24;
+				const hourStr = formatTime(hour, 0);
+				const temp = Math.round(temps[i]);
+				const icon = getWeatherIcon(conditions[i]);
+
+				const forecastItem = document.createElement('div');
+				forecastItem.className = 'forecast-item';
+				forecastItem.innerHTML = `${hourStr}<br><span style="font-weight:700">${temp}°</span><br>${icon}`;
+				forecastRow.appendChild(forecastItem);
+			}
+		}
+
+		// Initialize with New York weather
+		window.addEventListener('load', () => {
+			updateWeatherUI(40.7128, -74.0060, 'New York, United States');
+			document.getElementById('searchInput').value = 'New York, United States';
+		});
+
+		// Function to get weather for any city (latitude, longitude)
+		function getWeatherByCoords(lat, lon, name) {
+			updateWeatherUI(lat, lon, name);
+		}
+
+		// Quick city switcher with common locations
+		function switchCity(cityName) {
+			const cities = {
+				'New York': { lat: 40.7128, lon: -74.0060, country: 'United States' },
+				'London': { lat: 51.5074, lon: -0.1278, country: 'United Kingdom' },
+				'Paris': { lat: 48.8566, lon: 2.3522, country: 'France' },
+				'Tokyo': { lat: 35.6762, lon: 139.6503, country: 'Japan' },
+				'Sydney': { lat: -33.8688, lon: 151.2093, country: 'Australia' },
+				'Dubai': { lat: 25.2048, lon: 55.2708, country: 'United Arab Emirates' },
+				'Singapore': { lat: 1.3521, lon: 103.8198, country: 'Singapore' }
+			};
+
+			if (cities[cityName]) {
+				const city = cities[cityName];
+				const fullName = `${cityName}, ${city.country}`;
+				document.getElementById('searchInput').value = fullName;
+				updateWeatherUI(city.lat, city.lon, fullName);
+			}
+		}
+	</script>
 </body>
+
 </html>
