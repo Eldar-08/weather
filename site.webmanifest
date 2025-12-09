@@ -1,0 +1,15 @@
+{
+    "name": "Weather Demo",
+    "short_name": "Weather",
+    "start_url": "./weather.html",
+    "display": "standalone",
+    "background_color": "#7b49ff",
+    "theme_color": "#7b49ff",
+    "icons": [
+        {
+            "src": "favicon.svg?v=1",
+            "sizes": "64x64",
+            "type": "image/svg+xml"
+        }
+    ]
+}
