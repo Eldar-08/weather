@@ -20,24 +20,85 @@
 		</header>
 
 		<main>
-			<div class="about-content">
-				<h1 style="margin-top:0">About this app</h1>
-				<p style="color:var(--muted)">This is a small demo weather UI inspired by the provided design mockups.
-					It shows a home/start view, a main weather screen and additional info cards. The pages are static
-					HTML/CSS and can be extended to fetch live data from any weather API.</p>
+			<div class="about-content about-enhanced">
+				<section class="about-hero">
+					<h1>About Weather<span style="color:#ffd36b">.</span></h1>
+					<p class="lead">A clean, lightweight weather UI focused on clarity and usability. Connects to open
+						weather services to show current conditions, hourly forecasts, and essential climate details —
+						worldwide.</p>
+					<div class="cta-row">
+						<a class="cta" href="weather.html">Open Weather</a>
+						<a class="cta" href="index.html"
+							style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-left:12px">Back</a>
+					</div>
+				</section>
 
-				<h3 style="margin-top:18px">What you can do</h3>
-				<ul style="color:var(--muted)">
-					<li>Open the weather view to see current temperature and hourly forecast (static).</li>
-					<li>Use the layout as a starting point for integration with a weather API like OpenWeatherMap.</li>
-					<li>Customize colors, icons, and typography in <code>styles.css</code>.</li>
-				</ul>
+				<section class="features">
+					<div class="feature-card">
+						<div class="feature-icon">🌐</div>
+						<h4>Global Coverage</h4>
+						<p>Search any city, town, or region across the globe. Geocoding and forecast APIs power
+							worldwide results.</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">⚡</div>
+						<h4>Live Data</h4>
+						<p>Fetches current temperature, humidity, wind, UV index and hourly forecasts in realtime from
+							public APIs.</p>
+					</div>
+					<div class="feature-card">
+						<div class="feature-icon">🔒</div>
+						<h4>Privacy Friendly</h4>
+						<p>No tracking. The demo uses only third-party public APIs and does not collect personal data by
+							default.</p>
+					</div>
+				</section>
 
-				<div style="margin-top:18px">
-					<a href="weather.html" class="cta">Open Weather</a>
-					<a href="index.html" class="cta"
-						style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-left:12px">Back</a>
-				</div>
+				<section class="how-it-works">
+					<h3>How it works</h3>
+					<ol>
+						<li>Type a location into the search box — suggestions appear as you type.</li>
+						<li>Select a location to fetch coordinates from the Geocoding API.</li>
+						<li>The forecast API returns current and hourly weather which is shown in the UI.</li>
+					</ol>
+				</section>
+
+				<section class="data-sources">
+					<h3>Data sources</h3>
+					<p class="muted">This demo uses the <strong>Open-Meteo</strong> forecast API and its Geocoding
+						service. You can replace these with any other API (OpenWeatherMap, Meteostat, etc.).</p>
+				</section>
+
+				<section class="team-contact">
+					<div class="team">
+						<h3>About the project</h3>
+						<p class="muted">Built as a demo UI to help integrate weather APIs quickly. The code is simple
+							HTML/CSS/JS so you can extend it easily.</p>
+						<div class="team-grid">
+							<div class="team-member">
+								<div class="avatar">👩‍💻</div>
+								<div class="name">Developer</div>
+								<div class="role muted">Frontend / Integration</div>
+							</div>
+							<div class="team-member">
+								<div class="avatar">🛰️</div>
+								<div class="name">Data</div>
+								<div class="role muted">Weather APIs</div>
+							</div>
+						</div>
+					</div>
+					<div class="contact">
+						<h3>Contact / Feedback</h3>
+						<p class="muted">Have ideas or need help integrating another API? Drop a short note (demo only).
+						</p>
+						<form onsubmit="event.preventDefault(); alert('Thanks — this is a demo form.');">
+							<input type="text" placeholder="Your name" required />
+							<input type="email" placeholder="Email (optional)" />
+							<textarea placeholder="Message" rows="3"></textarea>
+							<button class="cta" type="submit">Send</button>
+						</form>
+					</div>
+				</section>
 			</div>
 		</main>
 
